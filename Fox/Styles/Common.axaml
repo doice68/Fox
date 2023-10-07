@@ -1,0 +1,64 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:editing="using:AvaloniaEdit.Editing"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+	<Style Selector=":is(Control).slideble">
+		<Style.Animations>
+			<Animation
+				Easing="SineEaseOut"
+				Duration="0:0:0.2">
+				<KeyFrame Cue="0%">
+					<Setter 
+						Property="Opacity"
+						Value="0.1"/>
+					<Setter
+						Property="Margin"
+						Value="15, 0, 0, 0"/>
+				</KeyFrame>
+				<KeyFrame Cue="100%">
+					<Setter
+						Property="Opacity"
+						Value="1"/>
+					<Setter
+						Property="Margin"
+						Value="0, 0"/>
+				</KeyFrame>
+			</Animation>
+		</Style.Animations>
+	</Style>
+	<Style Selector="editing|TextArea">
+		<Setter
+			Property="SelectionCornerRadius"
+			Value="0"/>
+		<Setter
+			Property="SelectionBrush"
+			Value="{StaticResource SystemAccentColor}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<DockPanel
+					Focusable="False"
+					Background="{TemplateBinding Background}">
+					<ItemsControl
+						DockPanel.Dock="Left"
+						Focusable="False"
+						Margin="0, 0, 16, 0"
+						ItemsSource="{TemplateBinding LeftMargins}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel
+									Orientation="Vertical"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+					<ContentPresenter
+						Name="PART_CP" Cursor="IBeam"
+						Focusable="False" Background="{TemplateBinding Background}" />
+				</DockPanel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

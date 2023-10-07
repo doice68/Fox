@@ -1,0 +1,195 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Fox.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+			 xmlns:editing="using:AvaloniaEdit.Editing"
+			 xmlns:controls="using:Fox.Controls"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Fox.Views.MainView"         
+			 x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+	<UserControl.Resources>
+		<VisualBrush
+			x:Key="CheckeredBrush"
+			DestinationRect="0,0,26,26"
+			Stretch="None"
+			TileMode="Tile">
+			<VisualBrush.Visual>
+				<Image Width="26" Height="26">
+					<Image.Source>
+						<DrawingImage>
+							<DrawingImage.Drawing>
+								<DrawingGroup>
+									<GeometryDrawing Brush="#1c1c1c" Geometry="M0,0 L2,0 2,2, 0,2Z" />
+									<GeometryDrawing Brush="#111" Geometry="M0,1 L2,1 2,2, 1,2 1,0 0,0Z" />
+								</DrawingGroup>
+							</DrawingImage.Drawing>
+						</DrawingImage>
+					</Image.Source>
+				</Image>
+			</VisualBrush.Visual>
+		</VisualBrush>
+	</UserControl.Resources>
+	<UserControl.KeyBindings>
+		<KeyBinding 
+			Gesture="f5"
+			Command="{Binding ToggleRunning}"/>
+	</UserControl.KeyBindings>
+	<Grid
+		Margin="8"
+		RowDefinitions="Auto, Auto, Auto, *, Auto, 0.4*">
+		<!--title bar-->
+		<Grid
+			IsHitTestVisible="True">
+			<!--title-->
+			<TextBlock
+				Margin="8, 0"
+				FontWeight="Bold"
+				VerticalAlignment="Center"
+				Text="Fox"/>
+			<Menu 
+				Margin="48, 0"
+				HorizontalAlignment="Center">
+				<MenuItem
+					IsEnabled="{Binding !Running}">
+					<MenuItem.Header>
+						<StackPanel
+							Spacing="5"
+							Orientation="Horizontal">
+							<ui:SymbolIcon
+								Symbol="Document"/>
+							<TextBlock
+								Text="File"/>
+						</StackPanel>
+					</MenuItem.Header>
+					<MenuItem
+						Header="Open code"
+						Command="{Binding OpenFileCommand}"/>
+					<MenuItem
+						Header="Save code"
+						Command="{Binding SaveFileCommand}"/>
+					<MenuItem
+						Header="Save as image"
+						Command="{Binding SaveImageCommand}"/>
+				</MenuItem>
+				<MenuItem 
+					Command="{Binding ToggleRunning}">
+					<MenuItem.Header>						
+						<StackPanel
+							Spacing="5"
+							Orientation="Horizontal">
+							<ui:SymbolIcon
+								Symbol="{Binding RunIcon}"/>
+							<TextBlock
+								Text="{Binding RunText}"/>
+						</StackPanel>
+					</MenuItem.Header>
+				</MenuItem>
+				<MenuItem
+					Command="{Binding ShowDocs}">
+					<MenuItem.Header>
+						<StackPanel
+							Spacing="5"
+							Orientation="Horizontal">
+							<ui:SymbolIcon
+								Symbol="Code"/>
+							<TextBlock
+								Text="Docs"/>
+						</StackPanel>
+					</MenuItem.Header>
+				</MenuItem>
+			</Menu>
+		</Grid>
+		<Separator
+			Grid.Row="2"/>
+		<Grid
+			Grid.Row="3"
+			ColumnDefinitions="*, 2, .8*">
+			<!--preview screen-->
+			<controls:StaticTab 
+				Grid.Row="2"
+				Header="Preview">
+				<Panel>					
+					<Rectangle
+						Fill="{StaticResource CheckeredBrush}"/>
+					<controls:FitPanel
+						Margin="16">
+						<Border
+							Background="White"
+							BoxShadow="10 10 32 0 #000"/>
+						<controls:PreviewCanvas
+							Bitmap="{Binding Bitmap}"
+							DrawCommands="{Binding DrawCommands}"/>
+					</controls:FitPanel>
+				</Panel>
+			</controls:StaticTab>
+			<GridSplitter
+				Grid.Column="1"
+				MinWidth="0"/>
+			<!--text editor-->
+			<controls:StaticTab
+				Grid.Column="2"
+				Header="Code">
+				<AvaloniaEdit:TextEditor
+					x:Name="textEditor"
+					Grid.Column="2"
+					Padding="8, 16"
+					FontSize="16"
+					Background="#111"
+					ShowLineNumbers="True"
+					Document="{Binding Code}"/>
+			</controls:StaticTab>
+		</Grid>
+		<GridSplitter
+			Grid.Row="4"
+			MinHeight="0"
+			Height="2"/>
+		<!--console-->
+		<Grid
+			Grid.Row="5">
+			<controls:StaticTab>
+				<controls:StaticTab.Header>
+					<StackPanel
+						Orientation="Horizontal"
+						Spacing="4">
+						<TextBlock
+							Margin="0, 0, 16, 0"
+							VerticalAlignment="Center"
+							Text="Console"/>
+						<CheckBox
+							IsChecked="{Binding AlwaysClearConsole}"
+							Content="Always Clear"/>
+						<Button
+							Command="{Binding ClearConsole}"
+							Content="Clear"/>
+					</StackPanel>
+				</controls:StaticTab.Header>
+				<Panel>
+					<Border
+						Background="#111"/>
+					<ScrollViewer
+						x:Name="consoleScrollViewer">
+						<ItemsControl
+							Margin="16"
+							ItemsSource="{Binding Logs}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<SelectableTextBlock
+										SelectionBrush="{StaticResource SystemAccentColor}"
+										Classes="slideble"
+										Foreground="{Binding Color}"
+										Text="{Binding Message}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Panel>
+			</controls:StaticTab>
+		</Grid>
+	</Grid>
+</UserControl>

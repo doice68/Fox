@@ -1,0 +1,13 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Fox.App"
+             xmlns:sty="using:FluentAvalonia.Styling"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <sty:FluentAvaloniaTheme/>
+		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <StyleInclude Source="/Controls/StaticTabStyle.axaml"/>
+	    <StyleInclude Source="/Styles/Common.axaml"/>
+	</Application.Styles>
+</Application>
